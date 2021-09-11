@@ -1,0 +1,11 @@
+### pycharm idea file ###
+.idea/
+
+
+### python venv files ###
+venv/
+
+
+### ignore __pycache__ folder ###
+*/__pycache__/
+
