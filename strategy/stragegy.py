@@ -21,17 +21,18 @@ class Strategy:
     def ma20_strategy(self):
         # self.data_api.get_df_data_from_cvs()
 
+        # 最后一行第一次读进来没用，直接当成昨天数据
         df_last_row = self.data_api.get_data_tail(1)
         y_open = df_last_row.at[0, 'open']
         y_close = df_last_row.at[0, 'close']
-        y_ma20 = df_last_row.at[0, 'ma30']
+        y_ma20 = df_last_row.at[0, 'ma20']
 
         for row in self.data_api.get_stock_data_except_last_row():
             ts_code = str(row['ts_code'])
             trade_date = str(row['trade_date'])
             today_open = row['open']
             today_close = row['close']
-            today_ma20 = row['ma30']
+            today_ma20 = row['ma20']
 
             # 未持仓01
             if max(y_open, y_close) <= y_ma20 or y_close < y_ma20 < y_open:
