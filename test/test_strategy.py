@@ -3,7 +3,7 @@ from data.daily_data import DataAPI
 from account.account_info import Account
 from strategy.stragegy import Strategy
 
-csv_file = '002230.csv'
+csv_file = '000651_noadj.csv'
 
 
 
