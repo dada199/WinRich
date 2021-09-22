@@ -3,7 +3,7 @@ from data.daily_data import DataAPI
 from account.account_info import Account
 from strategy.stragegy import Strategy
 
-csv_file = '600999.csv'
+csv_file = '000651_noadj.csv'
 
 
 
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     data_api.get_df_data_from_cvs(csv_file)
 
     account = Account()
-    account.transfer = 100000.00
+    account.transfer = 200000.00
 
     strategy = Strategy(account, data_api)
 
