@@ -50,3 +50,18 @@ class Cache:
     def has(self, job):
         """ check if a job is exist in the table """
         return bool(self.cur.execute("SELECT count(*) FROM jobs WHERE hash=?", (job['id'], )))
+
+    def get(self, id):
+        """retrieves job with select id"""
+        self.cur.execute("SELECT * FROM jobs WHERE hash=?", (id,))
+        item = self.cur.fetchone()
+        if item:
+            return dict(zip(("id", "description", "last-run", "next-run", "last-run-result"), item))
+        return None
+
+    def update(self, job):
+        self.cur.execute('''UPDATE jobs SET last_run=?,next_run=?,last_run_result=? WHERE hash=?''', (
+            job["last-run"], job["next-run"], job["last-run-result"], job["id"]))
+
+
+

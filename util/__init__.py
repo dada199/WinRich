@@ -1,1 +1,1 @@
-from util.setting_path import (setting_path, cache_path, log_path, strategy_path, bin_path, download_path)
+from util.setting_path import (setting_path, cache_path, log_path, strategy_path, bin_path, download_path, datafiles_path)

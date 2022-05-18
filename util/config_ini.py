@@ -13,12 +13,16 @@ from configparser import ConfigParser as conf
 logger = logging.getLogger(__name__)
 
 util_path = os.path.dirname(os.path.abspath(__file__))
-ini_file_path = util_path + '\\config_ini.ini'
+ini_file_path = os.path.join(util_path, os.sep, 'config_ini.ini')
 
 
 def get_config_value():
     pass
 
-def get_ini(sections="defaults", key):
+
+def get_ini_value(sections="defaults", key=""):
+    if not os.path.exists(ini_file_path):
+        raise FileNotFoundError("ini file doesn't exist.")
     conf.read(ini_file_path)
+    return conf.get(section=sections, key=key)
 

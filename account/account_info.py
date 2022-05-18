@@ -1,8 +1,15 @@
 # -*- coding:utf-8 -*-
 import pandas as pd
-import logging
+import logging.config
 
-logger = logging.getLogger(__name__)
+from common import contants as ct
+
+# 读取日志配置文件内容
+logging.config.fileConfig(ct.LOGGING_CONF_PATH)
+# 创建一个日志器logger
+logger = logging.getLogger('account')
+
+# logger = logging.getLogger(__name__)
 
 stock_info_columns = ['StockCode', 'StockName', 'StockValue', 'StockNumber', 'StockAvailable',
                       'StockCurrentPrice', 'StockCost', 'StockProfitAndLost']
@@ -38,12 +45,12 @@ class Account:
         self._available = 0.0
         # 冻结资金
         self._frozen = 0.0
-        # 买卖股票佣金
-        self.commission_rate = 0.0002
-        # 最小买卖佣金
-        self.commission_min = 5.0
-        # 印花税率 - 目前只有卖出股票算印花税
-        self.stamp_duty_rate = 0.001
+        # 买卖股票佣金 用ct.COMMISSION_RATE
+        # self.commission_rate = 0.0002
+        # 最小买卖佣金 用ct.COMMISSION_MIN
+        # self.commission_min = 5.0
+        # 印花税率 - 目前只有卖出股票算印花税 ct.STAMP_DUTY_RATE
+        # self.stamp_duty_rate = 0.001
         # 每次购买购票的值
         self._new_buy_stock_value = 0.0
 
@@ -100,13 +107,16 @@ class Account:
     def get_holding_stock(self):
         return self._df_share_info
 
+    def get_total_profit(self):
+        return round(self.get_total_asset() - self.transfer, 2)
+
     def buy(self, stock_code, stock_name, buy_number, buy_price, buy_date, trade_flag='B'):
 
         self._new_buy_stock_value = round(buy_price * buy_number, 2)
-        temp_commission = round(self._new_buy_stock_value * self.commission_rate, 2)
+        temp_commission = round(self._new_buy_stock_value * ct.COMMISSION_RATE, 2)
 
         # 计算佣金, 如果实际佣金金额小于5，那么佣金=5
-        buy_commission = self.commission_min if temp_commission < 5 else temp_commission
+        buy_commission = ct.COMMISSION_MIN if temp_commission < ct.COMMISSION_MIN else temp_commission
 
         if self._new_buy_stock_value + buy_commission > self._available:
             print(f'No enough money to buy {buy_number} number of stock')
@@ -182,9 +192,9 @@ class Account:
         # 本次卖出股票值
         value_this_time = sale_price * sale_number
         # 计算佣金, 如果实际佣金金额小于5，那么佣金=5
-        temp_commission = round(value_this_time * self.commission_rate, 2)
-        sale_commission = self.commission_min if temp_commission < 5 else temp_commission
-        stamp_duty = round(value_this_time * self.stamp_duty_rate, 2)
+        temp_commission = round(value_this_time * ct.COMMISSION_RATE, 2)
+        sale_commission = ct.COMMISSION_MIN if temp_commission < 5 else temp_commission
+        stamp_duty = round(value_this_time * ct.STAMP_DUTY_RATE, 2)
 
         if stock_code in self._df_share_info['StockCode'].values:
             # 持股中的index，因为每个股票只能有一条持股信息，所有取list[0]

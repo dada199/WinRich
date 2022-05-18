@@ -4,8 +4,8 @@ import time
 import os
 import logging
 
-project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-data_files_folder = project_path + '\\data_files'
+from util.setting_path import datafiles_path
+
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class DataAPI:
         :param csv_file_name:
         :return: get daily trading data from cvs file.
         """
-        full_path = os.path.join(data_files_folder, csv_file_name)
+        full_path = os.path.join(datafiles_path, csv_file_name)
         if not os.path.exists(full_path):
             logger.error(f'There is no file {csv_file_name}')
             raise FileNotFoundError
